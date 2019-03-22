@@ -3,22 +3,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 
-/**
- * A simple applet where the user can sketch curves in a variety of
- * colors.  A color palette is shown along the right edge of the applet.
- * The user can select a drawing color by clicking on a color in the
- * palette.  Under the colors is a "Clear button" that the user
- * can press to clear the sketch.  The user draws by clicking and
- * dragging in a large white area that occupies most of the applet.
- * The user's drawing is not persistent.  It is lost whenever
- * the applet is repainted for any reason.
- * <p>The drawing that is done in this example violates the rule
- * that all drawing should be done in the paintComponent() method.
- * Although it works, it is NOT good style.
- * <p>This class also contains a main program, and it can be run as
- * a stand-alone application that has exactly the same functionality
- * as the applet.
- */
+
 public class DrawingPorgramTest extends JApplet {
    
    /**
