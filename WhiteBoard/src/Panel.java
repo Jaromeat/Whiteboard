@@ -45,17 +45,15 @@ public class Panel extends JPanel
 	      {
 	        public void mousePressed( MouseEvent e )
 	        {
-	        	 x1 = TestDrawingClient.xyin[0];
+	        	  x1 = TestDrawingClient.xyin[0];
 			      y1=  TestDrawingClient.xyin[1];
 		          x2 = TestDrawingClient.xyin[2];
 		          y2=  TestDrawingClient.xyin[3];
 
-		          System.out.println("Mouse is being dragged at X: " + x1 + " Y: " + y1);  
+		          System.out.println("Line Drawn at at X: " + x1 + " Y: " + y1);  
 
 		          g.drawLine(x1,y1,x2,y2);
-
-		          x2=x1;
-		          y2=y1;
+		         
 	        }
 
 	       
