@@ -8,16 +8,16 @@
 3. Final deliverablies edited and outline for final product developed :
 	- Final Client will AT MINNIMUM include basic drawing functionality and texting editing which will be transmitted to another client and updated live. This incudes object shape, color, font and position.
 ## Goals for (3/18 - 3/22)
-1.Working object transmition including encoding and decoding of object data to String which can be transimitted.
+1. Working object transmition including encoding and decoding of object data to String which can be transimitted.
 
 # Week 2 (3/18 - 3/22)
 
 ## Updates:
-1.Decoding of X Y pairs wokring for the line drawing using basic swing Drawing client.
+1. Decoding of X Y pairs wokring for the line drawing using basic swing Drawing client.
 
 ## Goals for (3/22- 3/29)
-1.Reimpliment the encoding for the improved JavaFx client.
-2.Finish the decoding.
+1. Reimpliment the encoding for the improved JavaFx client.
+2. Finish the decoding.
 
 # Week 4 (3/22 - 3/29)
 
