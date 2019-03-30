@@ -22,12 +22,12 @@
 # Week 4 (3/22 - 3/29)
 
 ## Updates: 
-1.Encoder class created to be called by client.
-2.Decoder class created to take in all input, decode it, and perform the command.
-3.Began implementation of Javafx for drawing and object management.
+1. Encoder class created to be called by client.
+2. Decoder class created to take in all input, decode it, and perform the command.
+3. Began implementation of Javafx for drawing and object management (shapes, text, media).
 
 ## Goals for (3/29 - 4/5)
 1. Finish javafx implementation.
 2. Implement encode and decode class' methods into draw panel class.
-3. Test Whiteboard with shapes and text.
+3. Send shapes and text over the network.
 4. Figure out why Jamie's eclipse won't pull the repostory properly.
