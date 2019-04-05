@@ -1,19 +1,25 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+
 import javax.swing.*;
 
 
 
 public class DrawingPorgramTest extends JApplet {
    
-   /**
-    * The main routine opens a window that displays a drawing area
-    * and color palette.  This main routine allows this class to
-    * be run as a stand-alone application as well as as an applet.
-    * The main routine has nothing to do with the function of this
-    * class as an applet.
-    */
+	static Boolean serverCon = false;
+	static Boolean partnerCon= false;
+   
    public static void main(String[] args) {
+	   
+	   NetworkThread netListener = new NetworkThread();
+	   netListener.start();
+	   
       JFrame window = new JFrame("Simple Paint");
       SimplePaintPanel content = new SimplePaintPanel();
       window.setContentPane(content);
@@ -21,7 +27,9 @@ public class DrawingPorgramTest extends JApplet {
       window.setLocation(100,100);
       window.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
       window.setVisible(true);
-
+      
+      
+      
    }
    
    /**
@@ -313,5 +321,35 @@ public class DrawingPorgramTest extends JApplet {
       
       
    }  // End class SimplePaintPanel
+   
+   
+   public static class NetworkThread extends Thread {
 
+	    public void run(){
+	    	 Socket echoSocket;
+			try {
+				ServerSocket socket = new ServerSocket(6688);
+				Socket clientSocket = socket.accept();
+				ObjectInputStream oin = new ObjectInputStream(clientSocket.getInputStream());
+				
+				while(serverCon = true)
+				{
+					 int[] input = (int[]) oin.readObject();
+					
+				}
+				
+			} catch (IOException e) {
+				System.out.println("Initialization error");
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		       serverCon = true;
+		       System.out.println("Connected");
+		       
+		      
+		       
+	    }
+	  }
+   
 } // end class SimplePaint
