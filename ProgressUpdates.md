@@ -31,3 +31,17 @@
 2. Implement encode and decode class' methods into draw panel class.
 3. Send shapes and text over the network.
 4. Figure out why Jamie's eclipse won't pull the repostory properly.
+
+# Week 4 (3/22 - 3/29)
+
+## Updates: 
+1. Began implementation of Javafx for drawing and object management (shapes, text, media).
+2. Began build of final client 
+
+## Goals for (4/1 - 4/5)
+1. Finish javafx implementation.
+2. Implement encode and decode class' methods into draw panel class.
+3. Send shapes and text over the network.
+4. Figure out why Jamie's eclipse won't pull the repostory properly.
+5. Finalize class strucutre and verify 
+
