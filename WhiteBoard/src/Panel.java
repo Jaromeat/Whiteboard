@@ -8,8 +8,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import javax.swing.JPanel;
-
-import application.Circle;
+import javafx.scene.shape.Circle;
 
 public class Panel extends JPanel
 	    {
@@ -65,7 +64,7 @@ public class Panel extends JPanel
 	       
 	      }
 	      public ArrayList<Rectangle> rectangles = new ArrayList<Rectangle>();
-		    public ArrayList<Circle> circles = new ArrayList<Circle>();
+		    public ArrayList<javafx.scene.shape.Circle> circles = new ArrayList<Circle>();
 		      
 		    /**
 		     * creates a rectangle in client's panel and sends to server

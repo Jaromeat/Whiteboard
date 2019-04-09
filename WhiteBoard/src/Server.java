@@ -5,7 +5,6 @@ import java.net.ServerSocket;
 
 import java.util.ArrayList;
 
-import application.User;
 
 public class Server {
 	 private static boolean running = true;
