@@ -245,35 +245,28 @@ public class FinalClientUsingJavaFX extends Application {
 	    	
 	    	int i = 10;
    		    int j = 13;
-	    	 while(serverCon= true)
-		       {
-	    		 FinalClientUsingJavaFX test = new FinalClientUsingJavaFX();
-		     test.draw(i,i,j,j);
-		       i++;
-		       j++;
-		       }
-		       
-	    	 Socket echoSocket;
-			try {
-				ServerSocket socket = new ServerSocket(6688);
-				Socket clientSocket = socket.accept();
-				ObjectInputStream oin = new ObjectInputStream(clientSocket.getInputStream());
-				
-				while(serverCon = true)
-				{
-					 int[] input = (int[]) oin.readObject();
-					
-				}
-				
-			} catch (Throwable e) {
+	    	 
+	    		 //FinalClientUsingJavaFX test = new FinalClientUsingJavaFX();
+		     //test.draw(i,i,j,j);
+		      
+	    	 
+			try 
+			{
+				Socket echoSocket = new Socket("10.200.178.137", 6688);
+				System.out.println("Conncecte");
+				ObjectInputStream oin = new ObjectInputStream(echoSocket.getInputStream());	
+			} 
+			catch (Throwable e) 
+			{
 				System.out.println("Initialization error");
 			} 
+		       
 		       serverCon = true;
 		       System.out.println("Connected");
 		       
-	    }
+	    
 	  }
    
-    
+    }
 
 } // end class SimplePaint
