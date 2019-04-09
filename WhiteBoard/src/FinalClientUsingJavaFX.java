@@ -264,7 +264,6 @@ public class FinalClientUsingJavaFX extends Application {
 				while(serverCon = true)
 				{
 					 String input =  oin.readUTF();
-					recieveIntruction(input);
 				}
 				
 			} catch (Throwable e) {
