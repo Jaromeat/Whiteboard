@@ -326,10 +326,10 @@ public class DrawingPorgramTest extends JApplet {
    public static class NetworkThread extends Thread {
 
 	    public void run(){
-	    	 Socket echoSocket;
+	    	 
 			try {
-				ServerSocket socket = new ServerSocket(6688);
-				Socket clientSocket = socket.accept();
+				 Socket clientSocket = new Socket("10.200.178.137", 6688);
+				
 				ObjectInputStream oin = new ObjectInputStream(clientSocket.getInputStream());
 				
 				while(serverCon = true)
@@ -346,7 +346,7 @@ public class DrawingPorgramTest extends JApplet {
 			}
 		       serverCon = true;
 		       System.out.println("Connected");
-		       
+		     
 		      
 		       
 	    }
