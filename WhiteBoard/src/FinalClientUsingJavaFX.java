@@ -22,7 +22,7 @@ public class FinalClientUsingJavaFX extends Application {
         netListener.start();
         launch(args);
     }
-//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+
    
     private final Color[] palette = {
             Color.BLACK, Color.RED, Color.GREEN, Color.BLUE,
@@ -274,5 +274,6 @@ public class FinalClientUsingJavaFX extends Application {
 	    }
 	  }
    
+    
 
 } // end class SimplePaint
