@@ -47,7 +47,7 @@ being drawn by each user. The app hopes to  give users a collaborative way to dr
 2. Documentation
 3. Project finalization
 
-## Team members
+## Team memberz
 
 -Avery Munoz
 -Jamie Kerr
