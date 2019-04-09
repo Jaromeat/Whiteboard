@@ -1,7 +1,9 @@
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Scanner;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -51,7 +53,7 @@ public class FinalClientUsingJavaFX extends Application {
      */
     public void start(Stage stage) {
         
-        /* Create the canvans and draw its content for the first time. */
+        /* Create the canvas and draw its content for the first time. */
         
         canvas = new Canvas(600,400);
         g = canvas.getGraphicsContext2D();
@@ -88,7 +90,7 @@ public class FinalClientUsingJavaFX extends Application {
         g.fillRect(0,0,width,height);
 
         int colorSpacing = (height - 56) / 7;
-        // Distance between the top of one colored rectangle in the palette
+        // Distance between the top of one colored rectangle in the palette 
         // and the top of the rectangle below it.  The height of the
         // rectangle will be colorSpacing - 3.  There are 7 colored rectangles,
         // so the available space is divided by 7.  The available space allows
@@ -245,6 +247,7 @@ public class FinalClientUsingJavaFX extends Application {
 	    	
 	    	int i = 10;
    		    int j = 13;
+<<<<<<< HEAD
 	    	 
 	    		 //FinalClientUsingJavaFX test = new FinalClientUsingJavaFX();
 		     //test.draw(i,i,j,j);
@@ -258,6 +261,28 @@ public class FinalClientUsingJavaFX extends Application {
 			} 
 			catch (Throwable e) 
 			{
+=======
+	    	 while(serverCon= true)
+		       {
+	    		 FinalClientUsingJavaFX test = new FinalClientUsingJavaFX();
+		     test.draw(i,i,j,j);
+		       i++;
+		       j++;
+		       }
+		       
+	    	 Socket echoSocket;
+			try {
+				ServerSocket socket = new ServerSocket(6688);
+				Socket clientSocket = socket.accept();
+				DataInputStream oin = new DataInputStream(clientSocket.getInputStream());
+				
+				while(serverCon = true)
+				{
+					 String input =  oin.readUTF();
+				}
+				
+			} catch (Throwable e) {
+>>>>>>> 1d17cf2c03c14475915666cac5a8d2ce5259da3f
 				System.out.println("Initialization error");
 			} 
 		       
@@ -266,6 +291,43 @@ public class FinalClientUsingJavaFX extends Application {
 		       
 	    
 	  }
+    /**
+	 * takes an incoming string, decodes and performs all commands
+	 * @param s
+	 */	
+	public  void recieveIntruction(String s) {
+		
+		Scanner scnr = new Scanner(s);
+		
+		if (s.substring(0, 2).equals("Drw")) {
+			if (scnr.nextInt() == 1) {
+				//TODO: search draw array for this line to remove it
+			}
+			//TODO: draw line
+		}
+		else if(s.substring(0, 2).equals("Rec")) {
+			if(scnr.nextInt() == 1) {
+				//TODO: search rectangle array for this Rectangle to remove it
+			}
+			//Rectangle rectangle =
+			//new Rectangle(scnr.nextInt, scnr.nextInt, scnr.nextInt,scnr.nextInt);
+			//rectangleArray.add(rectangle);
+		}
+		else if(s.substring(0, 2).equals("Cir")) {
+			if(scnr.nextInt() == 1) {
+				//TODO: search circle array for this circle to remove it
+			}
+			//Circle circle = new Circle(scnr.nextInt, scnr.nextInt, scnr.nextInt, scnr.nextInt);
+			//circleArray.add(circle);
+			//
+		}
+		else if(s.substring(0, 2).equals("Med")) {
+			if(scnr.nextInt() == 1) {
+				//TODO: search media array for this Media to remove it
+			}
+			//TODO: draw Media
+		}
+	}
    
     }
 
