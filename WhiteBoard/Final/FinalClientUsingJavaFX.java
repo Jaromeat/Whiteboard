@@ -265,8 +265,11 @@ public class FinalClientUsingJavaFX extends Application {
         if (y > canvas.getHeight() - 4)       //   the drawing area.
             y = canvas.getHeight() - 4;
 
+        client.send("DRW " + String.format("%010d", prevX) + " " //send int approximation, may be changed to double approximation
+              	 + String.format("%010d", prevY) + " " + String.format("%010d", x) 
+              	 + " " + String.format("%010d", y));
         draw( prevX, prevY, x, y);  // Draw the line.
-    
+       
         prevX = x;  // Get ready for the next line segment in the curve.
         prevY = y;
 
@@ -275,9 +278,7 @@ public class FinalClientUsingJavaFX extends Application {
     public void draw(double prevX2, double prevY2, double x2, double y2)
     {
     	 g.strokeLine(prevX2, prevY2, x2, y2);  // Draw the line.
-    	 client.send("DRW " + String.format("%010d", prevX2) + " " //send int approximation, may be changed to double approximation
-    	 + String.format("%010d", prevY2) + " " + String.format("%010d", x2) 
-    	 + " " + String.format("%010d", y2));
+    	
     }
     
     public void drawIn(double prevX2, double prevY2, double x2, double y2) {
