@@ -19,10 +19,8 @@ public class NetHandler {
 	Scanner chat;
 	boolean run;
 	String nextOutput = null;
-	String prevOutput = null;
 	String nextInput = null;
-	Queue<String> inputs;
-	
+	FinalClientUsingJavaFX test = new FinalClientUsingJavaFX();
 
 	public NetHandler() throws IOException 
 	{
@@ -53,9 +51,33 @@ public class NetHandler {
 								nextInput = in.readUTF();
 								if(nextInput != null) {
 									System.out.println(nextInput);
-									inputs.add(nextInput);
-								}
+									
+								    		
+								    		if (nextInput.substring(0, 2).equals("Drw")) {
+								                
+								               test.getGraphics().strokeLine(Integer.parseInt(nextInput.substring(4, 7)), 
+								            		   Integer.parseInt(nextInput.substring(8, 11)), Integer.parseInt(nextInput.substring(13, 7))
+								            		   , Integer.parseInt(nextInput.substring(4, 7)));
+								            }
+								            else if(nextInput.substring(0, 2).equals("Rec")) {
+								                
+								                //Rectangle rectangle = new Rectangle(1, 1, 1, 1);
+								                
+								                //rectangleArray.add(rectangle);
+								            }
+								           else if(nextInput.substring(0, 2).equals("Cir")) {
+								                
+								                //Circle circle = new Circle(scnr.nextInt, scnr.nextInt, scnr.nextInt, scnr.nextInt);
+								                //circleArray.add(circle);
+								                //
+								            }
+								            else if(nextInput.substring(0, 2).equals("Med")) {
+								                
+								                //TODO: draw Media
+								            }
+								   }
 							}
+						
 							catch(IOException e)
 							{
 								e.printStackTrace();
@@ -81,9 +103,9 @@ public class NetHandler {
 				}
 				while(run)
 				{
-					//System.out.println(nextOutput);
-					if(nextOutput != prevOutput) {
-						System.out.println(nextOutput);
+					System.out.println(nextOutput);
+					if(nextOutput != null) {
+						
 						if(nextOutput.compareTo("{quit}") == 0)
 						{
 							run = false;
@@ -101,7 +123,7 @@ public class NetHandler {
 							{
 								out.writeUTF(nextOutput);
 								System.out.println(nextOutput);
-								prevOutput = nextOutput;
+								nextOutput = null;
 							} 
 							catch (IOException e) 
 							{
