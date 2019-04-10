@@ -1,4 +1,8 @@
+package src;
+
+
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.ServerSocket;
@@ -6,13 +10,17 @@ import java.net.Socket;
 import java.util.Scanner;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 
 public class FinalClientUsingJavaFX extends Application {
@@ -20,8 +28,7 @@ public class FinalClientUsingJavaFX extends Application {
    
     public static void main(String[] args) {
        
-        NetworkThread netListener = new NetworkThread();
-        netListener.start();
+    	
         launch(args);
     }
 
@@ -44,15 +51,23 @@ public class FinalClientUsingJavaFX extends Application {
     private Canvas canvas;  // The canvas on which everything is drawn.
 
     private static GraphicsContext g;  // For drawing on the canvas.
+    
+    private static Pane root;
+    
+    private NetHandler client;
+    
+    private boolean rectMode = false;
 
     static boolean serverCon = false;
 
     /**
      * The start() method creates the GUI, sets up event listening, and
      * shows the window on the screen.
+     * @throws IOException 
      */
-    public void start(Stage stage) {
+    public void start(Stage stage) throws IOException {
         
+    	client = new NetHandler();
         /* Create the canvas and draw its content for the first time. */
         
         canvas = new Canvas(600,400);
@@ -66,13 +81,21 @@ public class FinalClientUsingJavaFX extends Application {
         canvas.setOnMouseReleased( e -> mouseReleased(e) );
         
         /* Configure the GUI and show the window. */
-        
-        Pane root = new Pane(canvas);
+        Button rectBtn = new Button("Rectangle");
+        root = new Pane(canvas, rectBtn);
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setResizable(false);
         stage.setTitle("Simple Paint");
         stage.show();
+        
+        rectBtn.setOnAction(new EventHandler < ActionEvent > () {
+        	@Override
+        	public void handle(ActionEvent e) {
+        		rectMode = true;
+        	}
+        });
+        
     }
 
 
@@ -171,13 +194,13 @@ public class FinalClientUsingJavaFX extends Application {
             return;            //    when user is already drawing a curve.
                                //    (This can happen if the user presses
                                //    two mouse buttons at the same time.)
-
+        
         int x = (int)evt.getX();   // x-coordinate where the user clicked.
         int y = (int)evt.getY();   // y-coordinate where the user clicked.
 
         int width = (int)canvas.getWidth();    // Width of the canvas.
         int height = (int)canvas.getHeight();  // Height of the canvas.
-
+        
         if (x > width - 53) {
             // User clicked to the right of the drawing area.
             // This click is either on the clear button or
@@ -190,11 +213,22 @@ public class FinalClientUsingJavaFX extends Application {
         else if (x > 3 && x < width - 56 && y > 3 && y < height - 3) {
             // The user has clicked on the white drawing area.
             // Start drawing a curve from the point (x,y).
-            prevX = x;
-            prevY = y;
-            dragging = true;
-            g.setLineWidth(2);  // Use a 2-pixel-wide line for drawing.
-            g.setStroke( palette[currentColorNum] );
+        	if (rectMode) {
+        		Rectangle r = new Rectangle();
+        		r.setX(x);
+        		r.setY(y);
+        		r.setWidth(100);
+        		r.setHeight(100);
+        		root.getChildren().add(r);
+        		rectMode = false;
+        		client.send("REC " + x + " " + y + " " + 100 + " " + 100);
+            } else {
+            	prevX = x;
+            	prevY = y;
+            	dragging = true;
+            	g.setLineWidth(2);  // Use a 2-pixel-wide line for drawing.
+            	g.setStroke( palette[currentColorNum] );
+            }
         }
 
     } // end mousePressed()
@@ -210,7 +244,7 @@ public class FinalClientUsingJavaFX extends Application {
 
 
    
-    public void mouseDragged(MouseEvent evt) {
+    public void mouseDragged( MouseEvent evt) {
 
         if (dragging == false)
             return;  // Nothing to do because the user isn't drawing.
@@ -228,7 +262,7 @@ public class FinalClientUsingJavaFX extends Application {
         if (y > canvas.getHeight() - 4)       //   the drawing area.
             y = canvas.getHeight() - 4;
 
-        draw(prevX, prevY, x, y);  // Draw the line.
+        draw( prevX, prevY, x, y);  // Draw the line.
     
         prevX = x;  // Get ready for the next line segment in the curve.
         prevY = y;
@@ -238,97 +272,9 @@ public class FinalClientUsingJavaFX extends Application {
     public void draw(double x1,double y1,double prex, double prey)
     {
     	 g.strokeLine(prex, prey, x1, y1);  // Draw the line.
+    	 client.send("DRW " + prex + " " + prey + " " + x1 + " " + y1);
     }
     
-    public static class NetworkThread extends Thread {
-
-	    public void run(){
-	    	System.out.println("running");
-	    	
-	    	int i = 10;
-   		    int j = 13;
-<<<<<<< HEAD
-	    	 
-	    		 //FinalClientUsingJavaFX test = new FinalClientUsingJavaFX();
-		     //test.draw(i,i,j,j);
-		      
-	    	 
-			try 
-			{
-				Socket echoSocket = new Socket("10.200.178.137", 6688);
-				System.out.println("Conncecte");
-				ObjectInputStream oin = new ObjectInputStream(echoSocket.getInputStream());	
-			} 
-			catch (Throwable e) 
-			{
-=======
-	    	 while(serverCon= true)
-		       {
-	    		 FinalClientUsingJavaFX test = new FinalClientUsingJavaFX();
-		     test.draw(i,i,j,j);
-		       i++;
-		       j++;
-		       }
-		       
-	    	 Socket echoSocket;
-			try {
-				ServerSocket socket = new ServerSocket(6688);
-				Socket clientSocket = socket.accept();
-				DataInputStream oin = new DataInputStream(clientSocket.getInputStream());
-				
-				while(serverCon = true)
-				{
-					 String input =  oin.readUTF();
-				}
-				
-			} catch (Throwable e) {
->>>>>>> 1d17cf2c03c14475915666cac5a8d2ce5259da3f
-				System.out.println("Initialization error");
-			} 
-		       
-		       serverCon = true;
-		       System.out.println("Connected");
-		       
-	    
-	  }
-    /**
-	 * takes an incoming string, decodes and performs all commands
-	 * @param s
-	 */	
-	public  void recieveIntruction(String s) {
-		
-		Scanner scnr = new Scanner(s);
-		
-		if (s.substring(0, 2).equals("Drw")) {
-			if (scnr.nextInt() == 1) {
-				//TODO: search draw array for this line to remove it
-			}
-			//TODO: draw line
-		}
-		else if(s.substring(0, 2).equals("Rec")) {
-			if(scnr.nextInt() == 1) {
-				//TODO: search rectangle array for this Rectangle to remove it
-			}
-			//Rectangle rectangle =
-			//new Rectangle(scnr.nextInt, scnr.nextInt, scnr.nextInt,scnr.nextInt);
-			//rectangleArray.add(rectangle);
-		}
-		else if(s.substring(0, 2).equals("Cir")) {
-			if(scnr.nextInt() == 1) {
-				//TODO: search circle array for this circle to remove it
-			}
-			//Circle circle = new Circle(scnr.nextInt, scnr.nextInt, scnr.nextInt, scnr.nextInt);
-			//circleArray.add(circle);
-			//
-		}
-		else if(s.substring(0, 2).equals("Med")) {
-			if(scnr.nextInt() == 1) {
-				//TODO: search media array for this Media to remove it
-			}
-			//TODO: draw Media
-		}
-	}
-   
-    }
+  
 
 } // end class SimplePaint
