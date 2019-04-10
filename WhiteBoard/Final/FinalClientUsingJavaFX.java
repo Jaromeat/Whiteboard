@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import javafx.application.Application;
@@ -53,6 +54,8 @@ public class FinalClientUsingJavaFX extends Application {
     private static GraphicsContext g;  // For drawing on the canvas.
     
     private static Pane root;
+    
+    private static ArrayList<Rectangle> rectList;
     
     private NetHandler client;
     
@@ -221,6 +224,7 @@ public class FinalClientUsingJavaFX extends Application {
         	if (rectMode) {
         		Rectangle r = new Rectangle(x, y, 100, 100);
         		root.getChildren().add(r);
+        		rectList.add(r);
         		rectMode = false;
         		
         		client.send("REC " + String.format("%010d", x)
