@@ -1,11 +1,10 @@
-package Final;
+package src;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.Queue;
 import java.util.Scanner;
 
 public class NetHandler {
@@ -19,10 +18,6 @@ public class NetHandler {
 	Scanner chat;
 	boolean run;
 	String nextOutput = null;
-	String prevOutput = null;
-	String nextInput = null;
-	Queue<String> inputs;
-	
 
 	public NetHandler() throws IOException 
 	{
@@ -50,11 +45,8 @@ public class NetHandler {
 							try
 							{
 								in = new DataInputStream(ChatSocket.getInputStream());
-								nextInput = in.readUTF();
-								if(nextInput != null) {
-									System.out.println(nextInput);
-									inputs.add(nextInput);
-								}
+								String s = in.readUTF();
+								System.out.println(s);
 							}
 							catch(IOException e)
 							{
@@ -81,9 +73,8 @@ public class NetHandler {
 				}
 				while(run)
 				{
-					//System.out.println(nextOutput);
-					if(nextOutput != prevOutput) {
-						System.out.println(nextOutput);
+					if(nextOutput != null) {
+						
 						if(nextOutput.compareTo("{quit}") == 0)
 						{
 							run = false;
@@ -100,8 +91,7 @@ public class NetHandler {
 							try 
 							{
 								out.writeUTF(nextOutput);
-								System.out.println(nextOutput);
-								prevOutput = nextOutput;
+								nextOutput = null;
 							} 
 							catch (IOException e) 
 							{
@@ -126,7 +116,6 @@ public class NetHandler {
 	
 	public void send(String output) {
 		nextOutput = output;
-		
 	}
 
 	public static void main(String[] args) throws IOException {
