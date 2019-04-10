@@ -1,10 +1,11 @@
-package src;
+package Final;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Queue;
 import java.util.Scanner;
 
 public class NetHandler {
@@ -18,11 +19,14 @@ public class NetHandler {
 	Scanner chat;
 	boolean run;
 	String nextOutput = null;
+	String nextInput = null;
+	Queue<String> inputs;
+	
 
 	public NetHandler() throws IOException 
 	{
 	
-	ChatSocket = new Socket("10.200.151.10", 50001);
+	ChatSocket = new Socket("10.200.246.25", 50001);
 	
 	System.out.println("Connection Successful");
 	
@@ -45,8 +49,9 @@ public class NetHandler {
 							try
 							{
 								in = new DataInputStream(ChatSocket.getInputStream());
-								String s = in.readUTF();
-								System.out.println(s);
+								nextInput = in.readUTF();
+								inputs.add(nextInput);
+								System.out.println(nextInput);
 							}
 							catch(IOException e)
 							{
@@ -73,6 +78,7 @@ public class NetHandler {
 				}
 				while(run)
 				{
+					System.out.println(nextOutput);
 					if(nextOutput != null) {
 						
 						if(nextOutput.compareTo("{quit}") == 0)
@@ -116,6 +122,7 @@ public class NetHandler {
 	
 	public void send(String output) {
 		nextOutput = output;
+		
 	}
 
 	public static void main(String[] args) throws IOException {

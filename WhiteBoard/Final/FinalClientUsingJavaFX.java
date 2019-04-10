@@ -1,4 +1,4 @@
-package src;
+package Final;
 
 
 import java.io.DataInputStream;
@@ -56,6 +56,8 @@ public class FinalClientUsingJavaFX extends Application {
     
     private NetHandler client;
     
+    private String input;
+    
     private boolean rectMode = false;
 
     static boolean serverCon = false;
@@ -95,8 +97,38 @@ public class FinalClientUsingJavaFX extends Application {
         		rectMode = true;
         	}
         });
+        /*
+        	if (client.inputs.peek() != null) {
+        		input = client.inputs.remove();
+        		
+        		if (input.substring(0, 2).equals("Drw")) {
+                    
+                    //TODO: draw line
+                }
+                else if(input.substring(0, 2).equals("Rec")) {
+                    
+                    Rectangle rectangle = new Rectangle();
+                    //rectangleArray.add(rectangle);
+                }
+               else if(s.substring(0, 2).equals("Cir")) {
+                    if(scnr.nextInt() == 1) {
+                        //TODO: search circle array for this circle to remove it
+                    }
+                    //Circle circle = new Circle(scnr.nextInt, scnr.nextInt, scnr.nextInt, scnr.nextInt);
+                    //circleArray.add(circle);
+                    //
+                }
+                else if(s.substring(0, 2).equals("Med")) {
+                    if(scnr.nextInt() == 1) {
+                        //TODO: search media array for this Media to remove it
+                    }
+                    //TODO: draw Media
+                }
+        	}*/
+        }
         
-    }
+        
+    
 
 
     /**
