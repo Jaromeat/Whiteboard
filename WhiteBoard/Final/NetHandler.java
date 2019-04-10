@@ -28,7 +28,7 @@ public class NetHandler {
 	public NetHandler() throws IOException 
 	{
 	
-	ChatSocket = new Socket("10.200.246.25", 50001);
+	ChatSocket = new Socket("10.200.246.25", 50000);
 	
 	System.out.println("Connection Successful");
 	
@@ -113,21 +113,8 @@ public class NetHandler {
 						
 
 					if(nextOutput != null) {
+			
 						
-
-						if(nextOutput.compareTo("{quit}") == 0)
-						{
-							run = false;
-							try 
-							{
-								closeConnection();
-							} 
-							catch (IOException e) 
-							{
-								e.printStackTrace();
-							}
-						
-						} else {
 							try 
 							{
 								out.writeUTF(nextOutput);
@@ -138,7 +125,7 @@ public class NetHandler {
 							{
 								e.printStackTrace();
 							}
-						}
+						
 					
 					}
 					
@@ -162,8 +149,11 @@ public class NetHandler {
 	}
 	public void sendDrw(int prevx, int prevy, int x, int y)
 	{
-		
-		nextOutput = ("DRW" + x + y + prevx + prevy );
+		String numberAsString = String.valueOf(prevx);
+	    String paddedprevx = "0000".substring(numberAsString.length()) + numberAsString;
+	    
+	    
+		nextOutput = ("DRW" + paddedprevx );
 	}
 
 	public static void main(String[] args) throws IOException {
