@@ -8,6 +8,8 @@ import java.net.UnknownHostException;
 import java.util.Queue;
 import java.util.Scanner;
 
+import com.sun.javafx.geom.Rectangle;
+
 public class NetHandler {
 	
 	final public static String host = "localhost";
@@ -65,7 +67,7 @@ public class NetHandler {
 								                Rectangle rectangle = new Rectangle(Integer.parseInt(nextInput.substring(4, 7)), 
 									            		   Integer.parseInt(nextInput.substring(8, 11)), Integer.parseInt(nextInput.substring(13, 7)),
 									            		   Integer.parseInt(nextInput.substring(4, 7)));
-								                test.getPane().getChildren().add(rectangle);
+								               // test.getPane().getChildren().add(rectangle);
 								            }
 								           else if(nextInput.substring(0, 2).equals("Cir")) {
 								                

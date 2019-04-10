@@ -290,5 +290,9 @@ public class FinalClientUsingJavaFX extends Application {
     public GraphicsContext getGraphics() {
     	return g;
     }
+    public Pane getPane()
+    {
+    	return root;
+    }
 
 } // end class SimplePaint
