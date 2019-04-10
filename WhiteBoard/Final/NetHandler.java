@@ -57,14 +57,15 @@ public class NetHandler {
 								    		if (nextInput.substring(0, 2).equals("Drw")) {
 								                
 								               test.getGraphics().strokeLine(Integer.parseInt(nextInput.substring(4, 7)), 
-								            		   Integer.parseInt(nextInput.substring(8, 11)), Integer.parseInt(nextInput.substring(13, 7))
-								            		   , Integer.parseInt(nextInput.substring(4, 7)));
+								            		   Integer.parseInt(nextInput.substring(8, 11)), Integer.parseInt(nextInput.substring(13, 7)),
+								            		   Integer.parseInt(nextInput.substring(4, 7)));
 								            }
 								            else if(nextInput.substring(0, 2).equals("Rec")) {
 								                
-								                //Rectangle rectangle = new Rectangle(1, 1, 1, 1);
-								                
-								                //rectangleArray.add(rectangle);
+								                Rectangle rectangle = new Rectangle(Integer.parseInt(nextInput.substring(4, 7)), 
+									            		   Integer.parseInt(nextInput.substring(8, 11)), Integer.parseInt(nextInput.substring(13, 7)),
+									            		   Integer.parseInt(nextInput.substring(4, 7)));
+								                test.getPane().getChildren().add(rectangle);
 								            }
 								           else if(nextInput.substring(0, 2).equals("Cir")) {
 								                

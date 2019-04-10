@@ -284,7 +284,7 @@ public class FinalClientUsingJavaFX extends Application {
     	
     }
     
-    public void drawIn(double prevX2, double prevY2, double x2, double y2) {
+    public void drawIn(int prevX2, int prevY2, int x2, int y2) {
     	g.strokeLine(prevX2, prevY2, x2, y2);
     }
     public GraphicsContext getGraphics() {
