@@ -50,8 +50,10 @@ public class NetHandler {
 							{
 								in = new DataInputStream(ChatSocket.getInputStream());
 								nextInput = in.readUTF();
-								inputs.add(nextInput);
-								System.out.println(nextInput);
+								if(nextInput != null) {
+									System.out.println(nextInput);
+									inputs.add(nextInput);
+								}
 							}
 							catch(IOException e)
 							{
@@ -97,6 +99,7 @@ public class NetHandler {
 							try 
 							{
 								out.writeUTF(nextOutput);
+								System.out.println(nextOutput);
 								nextOutput = null;
 							} 
 							catch (IOException e) 

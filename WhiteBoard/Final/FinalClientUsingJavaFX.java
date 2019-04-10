@@ -97,13 +97,13 @@ public class FinalClientUsingJavaFX extends Application {
         		rectMode = true;
         	}
         });
-        /*
-        	if (client.inputs.peek() != null) {
+        
+        	/*if (client.inputs.peek() != null) {
         		input = client.inputs.remove();
         		
         		if (input.substring(0, 2).equals("Drw")) {
                     
-                    //TODO: draw line
+                    draw()
                 }
                 else if(input.substring(0, 2).equals("Rec")) {
                     
