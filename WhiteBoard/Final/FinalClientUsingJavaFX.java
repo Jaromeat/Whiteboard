@@ -269,7 +269,7 @@ public class FinalClientUsingJavaFX extends Application {
           //    	 + String.format("%010d", prevY) + " " + String.format("%010d", x) 
             //  	 + " " + String.format("%010d", y));
         
-       client.sendDrw(prevX, prevY, x, y);
+       client.send("DRW " + prevX + " " + prevY + " " + x + " " + y);
         
         draw( prevX, prevY, x, y);  // Draw the line.
        
