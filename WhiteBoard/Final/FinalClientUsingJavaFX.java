@@ -41,9 +41,9 @@ public class FinalClientUsingJavaFX extends Application {
     private int currentColorNum = 0;  // The currently selected drawing color,
                                       //   coded as an index into the above array
 
-    public double prevX, prevY;   // The previous location of the mouse, when
+    public int prevX, prevY;   // The previous location of the mouse, when
                                    // the user is drawing by dragging the mouse.
-    public double x , y;   // x-coordinate of mouse.
+    public int x , y;   // x-coordinate of mouse.
   
     
     private boolean dragging;   // This is set to true while the user is drawing.
@@ -252,8 +252,8 @@ public class FinalClientUsingJavaFX extends Application {
         if (dragging == false)
             return;  // Nothing to do because the user isn't drawing.
 
-         x = evt.getX();   // x-coordinate of mouse.
-         y = evt.getY();   // y-coordinate of mouse.
+         x = (int) evt.getX();   // x-coordinate of mouse.
+         y = (int) evt.getY();   // y-coordinate of mouse.
 
         if (x < 3)                          // Adjust the value of x,
             x = 3;                           //   to make sure it's in
@@ -263,11 +263,14 @@ public class FinalClientUsingJavaFX extends Application {
         if (y < 3)                          // Adjust the value of y,
             y = 3;                           //   to make sure it's in
         if (y > canvas.getHeight() - 4)       //   the drawing area.
-            y = canvas.getHeight() - 4;
+            y = (int) (canvas.getHeight() - 4);
 
-        client.send("DRW " + String.format("%010d", prevX) + " " //send int approximation, may be changed to double approximation
-              	 + String.format("%010d", prevY) + " " + String.format("%010d", x) 
-              	 + " " + String.format("%010d", y));
+        //client.send("DRW " + String.format("%010d", prevX) + " " //send int approximation, may be changed to double approximation
+          //    	 + String.format("%010d", prevY) + " " + String.format("%010d", x) 
+            //  	 + " " + String.format("%010d", y));
+        
+       client.sendDrw(x, y, prevX, prevY);
+        
         draw( prevX, prevY, x, y);  // Draw the line.
        
         prevX = x;  // Get ready for the next line segment in the curve.
@@ -275,7 +278,7 @@ public class FinalClientUsingJavaFX extends Application {
 
     } // end mouseDragged()
 
-    public void draw(double prevX2, double prevY2, double x2, double y2)
+    public void draw(int prevX2, int prevY2, int x2, int y2)
     {
     	 g.strokeLine(prevX2, prevY2, x2, y2);  // Draw the line.
     	

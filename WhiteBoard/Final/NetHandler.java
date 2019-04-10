@@ -157,6 +157,11 @@ public class NetHandler {
 		nextOutput = output;
 		
 	}
+	public void sendDrw(int prevx, int prevy, int x, int y)
+	{
+		
+		nextOutput = ("DRW" + x + y + prevx + prevy );
+	}
 
 	public static void main(String[] args) throws IOException {
 		NetHandler client = new NetHandler();
