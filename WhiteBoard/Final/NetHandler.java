@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Queue;
 import java.util.Scanner;
 
@@ -24,14 +25,18 @@ public class NetHandler {
 	String prevOutput = null;
 	String nextInput = null;
 	FinalClientUsingJavaFX test = new FinalClientUsingJavaFX();
+	ArrayList<String> inQueue;
+	ArrayList<String> outQueue;
 
 	public NetHandler() throws IOException 
 	{
 	
-	ChatSocket = new Socket("10.200.246.25", 50001);
+	ChatSocket = new Socket("10.200.246.25", 50000);
 	
 	System.out.println("Connection Successful");
 	
+	inQueue = new ArrayList<String>();
+	outQueue = new ArrayList<String>();
 	run = true;
 	
 	runClientThreads();
@@ -109,36 +114,21 @@ public class NetHandler {
 				{
 					System.out.println(nextOutput);
 
-					
+					if(!outQueue.isEmpty()) {
 						
-
-					if(nextOutput != null) {
+						nextOutput = outQueue.remove(outQueue.size() - 1);
 						
-
-						if(nextOutput.compareTo("{quit}") == 0)
+						try 
 						{
-							run = false;
-							try 
-							{
-								closeConnection();
-							} 
-							catch (IOException e) 
-							{
-								e.printStackTrace();
-							}
-						
-						} else {
-							try 
-							{
-								out.writeUTF(nextOutput);
-								System.out.println(nextOutput);
-								nextOutput = null;
-							} 
-							catch (IOException e) 
-							{
-								e.printStackTrace();
-							}
+							out.writeUTF(nextOutput);
+							System.out.println(nextOutput);
+							nextOutput = null;
+						} 
+						catch (IOException e) 
+						{
+							e.printStackTrace();
 						}
+						
 					
 					}
 					
@@ -157,13 +147,7 @@ public class NetHandler {
 	}
 	
 	public void send(String output) {
-		nextOutput = output;
-		
-	}
-	public void sendDrw(int prevx, int prevy, int x, int y)
-	{
-		
-		nextOutput = ("DRW" + x + y + prevx + prevy );
+		outQueue.add(output);
 	}
 
 	public static void main(String[] args) throws IOException {
