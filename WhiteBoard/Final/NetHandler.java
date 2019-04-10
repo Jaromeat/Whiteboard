@@ -81,7 +81,7 @@ public class NetHandler {
 				}
 				while(run)
 				{
-					//System.out.println(nextOutput);
+					System.out.println(nextOutput);
 					if(nextOutput != prevOutput) {
 						System.out.println(nextOutput);
 						if(nextOutput.compareTo("{quit}") == 0)
