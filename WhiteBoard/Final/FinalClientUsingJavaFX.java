@@ -97,31 +97,7 @@ public class FinalClientUsingJavaFX extends Application {
         		rectMode = true;
         	}
         });
-       /* 
-        if (client.inputs.peek() != null) {
-    		input = client.inputs.remove();
-    		
-    		if (input.substring(0, 2).equals("Drw")) {
-                
-                draw(1, 1, 1, 1);
-            }
-            else if(input.substring(0, 2).equals("Rec")) {
-                
-                Rectangle rectangle = new Rectangle(1, 1, 1, 1);
-                
-                //rectangleArray.add(rectangle);
-            }
-           else if(input.substring(0, 2).equals("Cir")) {
-                
-                //Circle circle = new Circle(scnr.nextInt, scnr.nextInt, scnr.nextInt, scnr.nextInt);
-                //circleArray.add(circle);
-                //
-            }
-            else if(input.substring(0, 2).equals("Med")) {
-                
-                //TODO: draw Media
-            }
-    	}*/
+       
         }
         
         
@@ -296,14 +272,19 @@ public class FinalClientUsingJavaFX extends Application {
 
     } // end mouseDragged()
 
-    public void draw(double x1,double y1,double prex, double prey)
+    public void draw(double prevX2, double prevY2, double x2, double y2)
     {
-    	 g.strokeLine(prex, prey, x1, y1);  // Draw the line.
-    	 client.send("DRW " + String.format("%010d", prex) + " "
-    	 + String.format("%010d", prey) + " " + String.format("%010d", x1) 
-    	 + " " + String.format("%010d", y1));
+    	 g.strokeLine(prevX2, prevY2, x2, y2);  // Draw the line.
+    	 client.send("DRW " + String.format("%010d", prevX2) + " " //send int approximation, may be changed to double approximation
+    	 + String.format("%010d", prevY2) + " " + String.format("%010d", x2) 
+    	 + " " + String.format("%010d", y2));
     }
     
-  
+    public void drawIn(double prevX2, double prevY2, double x2, double y2) {
+    	g.strokeLine(prevX2, prevY2, x2, y2);
+    }
+    public GraphicsContext getGraphics() {
+    	return g;
+    }
 
 } // end class SimplePaint
