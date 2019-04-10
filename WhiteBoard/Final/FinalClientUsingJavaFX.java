@@ -97,34 +97,31 @@ public class FinalClientUsingJavaFX extends Application {
         		rectMode = true;
         	}
         });
-        
-        	/*if (client.inputs.peek() != null) {
-        		input = client.inputs.remove();
-        		
-        		if (input.substring(0, 2).equals("Drw")) {
-                    
-                    draw()
-                }
-                else if(input.substring(0, 2).equals("Rec")) {
-                    
-                    Rectangle rectangle = new Rectangle();
-                    //rectangleArray.add(rectangle);
-                }
-               else if(s.substring(0, 2).equals("Cir")) {
-                    if(scnr.nextInt() == 1) {
-                        //TODO: search circle array for this circle to remove it
-                    }
-                    //Circle circle = new Circle(scnr.nextInt, scnr.nextInt, scnr.nextInt, scnr.nextInt);
-                    //circleArray.add(circle);
-                    //
-                }
-                else if(s.substring(0, 2).equals("Med")) {
-                    if(scnr.nextInt() == 1) {
-                        //TODO: search media array for this Media to remove it
-                    }
-                    //TODO: draw Media
-                }
-        	}*/
+       /* 
+        if (client.inputs.peek() != null) {
+    		input = client.inputs.remove();
+    		
+    		if (input.substring(0, 2).equals("Drw")) {
+                
+                draw(1, 1, 1, 1);
+            }
+            else if(input.substring(0, 2).equals("Rec")) {
+                
+                Rectangle rectangle = new Rectangle(1, 1, 1, 1);
+                
+                //rectangleArray.add(rectangle);
+            }
+           else if(input.substring(0, 2).equals("Cir")) {
+                
+                //Circle circle = new Circle(scnr.nextInt, scnr.nextInt, scnr.nextInt, scnr.nextInt);
+                //circleArray.add(circle);
+                //
+            }
+            else if(input.substring(0, 2).equals("Med")) {
+                
+                //TODO: draw Media
+            }
+    	}*/
         }
         
         
@@ -246,14 +243,12 @@ public class FinalClientUsingJavaFX extends Application {
             // The user has clicked on the white drawing area.
             // Start drawing a curve from the point (x,y).
         	if (rectMode) {
-        		Rectangle r = new Rectangle();
-        		r.setX(x);
-        		r.setY(y);
-        		r.setWidth(100);
-        		r.setHeight(100);
+        		Rectangle r = new Rectangle(x, y, 100, 100);
         		root.getChildren().add(r);
         		rectMode = false;
-        		client.send("REC " + x + " " + y + " " + 100 + " " + 100);
+        		
+        		client.send("REC " + String.format("%010d", x)
+        		+ " " + String.format("%010d", y) + " " + 100 + " " + 100);
             } else {
             	prevX = x;
             	prevY = y;
@@ -304,7 +299,9 @@ public class FinalClientUsingJavaFX extends Application {
     public void draw(double x1,double y1,double prex, double prey)
     {
     	 g.strokeLine(prex, prey, x1, y1);  // Draw the line.
-    	 client.send("DRW " + prex + " " + prey + " " + x1 + " " + y1);
+    	 client.send("DRW " + String.format("%010d", prex) + " "
+    	 + String.format("%010d", prey) + " " + String.format("%010d", x1) 
+    	 + " " + String.format("%010d", y1));
     }
     
   
