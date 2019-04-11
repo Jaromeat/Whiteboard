@@ -62,7 +62,9 @@ public class FinalClientUsingJavaFX extends Application {
     
     private String input;
     
-    public static ArrayList<String> inQueue;
+    public static ArrayList<String> inQueue = new ArrayList<String>();
+    
+    public static ArrayList<String> outQueue = new ArrayList<String>();
     
     private boolean rectMode = false;
 
@@ -76,7 +78,7 @@ public class FinalClientUsingJavaFX extends Application {
      */
     public void start(Stage stage) throws IOException {
         
-    	inQueue = new ArrayList<String>();
+    	
     	client = new NetHandler();
         /* Create the canvas and draw its content for the first time. */
         
@@ -297,9 +299,12 @@ public class FinalClientUsingJavaFX extends Application {
     {
     	return root;
     }
-    public ArrayList<String> getInQueue() {
+    public static ArrayList<String> getInQueue() {
 		return inQueue;
 	}
+    public static ArrayList<String> getOutQueue() {
+    	return outQueue;
+    }
 
     public static class NetworkThread extends Thread {
 

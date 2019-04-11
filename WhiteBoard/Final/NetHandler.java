@@ -50,12 +50,15 @@ public class NetHandler {
 
 					public void run() 
 					{
-						inQueue = test.getInQueue();
-						while(run)
-						{
-							try
+						try {
+							in = new DataInputStream(ChatSocket.getInputStream());
+						
+							inQueue = FinalClientUsingJavaFX.getInQueue();
+						
+							while(run)
 							{
-								in = new DataInputStream(ChatSocket.getInputStream());
+							
+								
 								nextInput = in.readUTF();
 								if(nextInput != null) {
 									System.out.println(nextInput);   
@@ -64,10 +67,10 @@ public class NetHandler {
 								   } 
 							}
 							
-							catch(IOException e)
-							{
-								e.printStackTrace();
-							}
+						}
+						catch(IOException e)
+						{
+							e.printStackTrace();
 						}
 						
 					}
@@ -79,7 +82,7 @@ public class NetHandler {
 
 			public void run() 
 			{
-				outQueue = new ArrayList<String>();
+				
 				try 
 				{
 					out = new DataOutputStream(ChatSocket.getOutputStream());
@@ -90,7 +93,7 @@ public class NetHandler {
 				}
 				while(run)
 				{					
-					if(!outQueue.isEmpty()) {
+					if(outQueue.size() != 0) {
 						
 						nextOutput = outQueue.remove(outQueue.size() - 1);
 						System.out.println(nextOutput);
