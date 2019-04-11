@@ -27,6 +27,7 @@ public class NetHandler {
 	FinalClientUsingJavaFX test = new FinalClientUsingJavaFX();
 	ArrayList<String> inQueue;
 	ArrayList<String> outQueue;
+	
 
 	public NetHandler() throws IOException 
 	{
@@ -58,35 +59,12 @@ public class NetHandler {
 								in = new DataInputStream(ChatSocket.getInputStream());
 								nextInput = in.readUTF();
 								if(nextInput != null) {
-									System.out.println(nextInput);
-									
-								    		
-								    		if (nextInput.substring(0, 2).equals("Drw")) {
-								                
-								               test.getGraphics().strokeLine(Integer.parseInt(nextInput.substring(4, 7)), 
-								            		   Integer.parseInt(nextInput.substring(8, 11)), Integer.parseInt(nextInput.substring(13, 7)),
-								            		   Integer.parseInt(nextInput.substring(4, 7)));
-								            }
-								            else if(nextInput.substring(0, 2).equals("Rec")) {
-								                
-								                Rectangle rectangle = new Rectangle(Integer.parseInt(nextInput.substring(4, 7)), 
-									            		   Integer.parseInt(nextInput.substring(8, 11)), Integer.parseInt(nextInput.substring(13, 7)),
-									            		   Integer.parseInt(nextInput.substring(4, 7)));
-								               // test.getPane().getChildren().add(rectangle);
-								            }
-								           else if(nextInput.substring(0, 2).equals("Cir")) {
-								                
-								                //Circle circle = new Circle(scnr.nextInt, scnr.nextInt, scnr.nextInt, scnr.nextInt);
-								                //circleArray.add(circle);
-								                //
-								            }
-								            else if(nextInput.substring(0, 2).equals("Med")) {
-								                
-								                //TODO: draw Media
-								            }
-								   }
+									System.out.println(nextInput);   
+								    inQueue.add(nextInput);
+								         
+								   } 
 							}
-						
+							
 							catch(IOException e)
 							{
 								e.printStackTrace();
@@ -111,13 +89,11 @@ public class NetHandler {
 					e1.printStackTrace();
 				}
 				while(run)
-				{
-					System.out.println(nextOutput);
-
+				{					
 					if(!outQueue.isEmpty()) {
 						
 						nextOutput = outQueue.remove(outQueue.size() - 1);
-						
+						System.out.println(nextOutput);
 						try 
 						{
 							out.writeUTF(nextOutput);
@@ -148,6 +124,11 @@ public class NetHandler {
 	
 	public void send(String output) {
 		outQueue.add(output);
+	}
+	public Socket getSocket()
+	{
+		return ChatSocket;
+		
 	}
 
 	public static void main(String[] args) throws IOException {
