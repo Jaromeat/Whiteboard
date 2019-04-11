@@ -32,7 +32,7 @@ public class NetHandler {
 	public NetHandler() throws IOException 
 	{
 	
-	ChatSocket = new Socket("10.200.246.25", 50000);
+	ChatSocket = new Socket("10.200.208.146", 50000);
 	
 	System.out.println("Connection Successful");
 	
@@ -51,11 +51,17 @@ public class NetHandler {
 					public void run() 
 					{
 						inQueue = test.getInQueue();
+						try {
+							in = new DataInputStream(ChatSocket.getInputStream());
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 						while(run)
 						{
 							try
 							{
-								in = new DataInputStream(ChatSocket.getInputStream());
+								
 								nextInput = in.readUTF();
 								if(nextInput != null) {
 									System.out.println(nextInput);   
@@ -88,31 +94,37 @@ public class NetHandler {
 				{
 					e1.printStackTrace();
 				}
-				while(run)
-				{					
-					if(!outQueue.isEmpty()) {
-						
-						nextOutput = outQueue.remove(outQueue.size() - 1);
-						System.out.println(nextOutput);
-						try 
-						{
-							out.writeUTF(nextOutput);
+				while(true)
+				{		
+					try {
+						Thread.sleep(10);
+						//System.out.println(nextOutput);
+						if(outQueue.size() != 0) {
+							nextOutput = outQueue.remove(0);
+							if (nextOutput == null) {
+								continue;
+							}
 							System.out.println(nextOutput);
-							nextOutput = null;
-						} 
-						catch (IOException e) 
-						{
-							e.printStackTrace();
-						}
-						
+								out.writeUTF(nextOutput);
+								out.flush();
+								//System.out.println(nextOutput);
+						}	
+					}
+					catch (IOException e) 
+					{
+						e.printStackTrace();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					
+						
+						nextOutput = null;
 					}
 					
 				}
-			}
 	
-		});
-		output.start();
+		});output.start();
 	}
 
 	public void closeConnection() throws IOException

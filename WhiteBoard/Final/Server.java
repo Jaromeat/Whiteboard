@@ -23,7 +23,7 @@ public class Server {
 
 	        try {
 	        	
-	            ServerSocket ss = new ServerSocket(3000);
+	            ServerSocket ss = new ServerSocket(5000);
 
 	            userlist = new ArrayList<User>();
 	           
