@@ -28,7 +28,8 @@ public class FinalClientUsingJavaFX extends Application {
 
    
     public static void main(String[] args) {
-       
+    	 NetworkThread netListener = new NetworkThread();
+  	     netListener.start();
     	
         launch(args);
     }
@@ -61,9 +62,12 @@ public class FinalClientUsingJavaFX extends Application {
     
     private String input;
     
+    public static ArrayList<String> inQueue;
+    
     private boolean rectMode = false;
 
     static boolean serverCon = false;
+  
 
     /**
      * The start() method creates the GUI, sets up event listening, and
@@ -227,8 +231,8 @@ public class FinalClientUsingJavaFX extends Application {
         		rectList.add(r);
         		rectMode = false;
         		
-        		client.send("REC " + String.format("%010d", x)
-        		+ " " + String.format("%010d", y) + " " + 100 + " " + 100);
+        		client.send("REC " + x
+        		+ " " + y + " " + 100 + " " + 100);
             } else {
             	prevX = x;
             	prevY = y;
@@ -299,4 +303,52 @@ public class FinalClientUsingJavaFX extends Application {
     	return root;
     }
 
+    public static class NetworkThread extends Thread {
+
+	    public void run(){
+	    	 
+	    	 
+			while(serverCon = true)
+			{
+				if(!inQueue.isEmpty()) {
+					
+					
+					String formattedIn[] = inQueue.remove(inQueue.size() - 1).split("\\s+"); 
+					if (formattedIn[0].equals("Drw")) {
+		                
+						 g.strokeLine( Integer.parseInt(formattedIn[1]), 
+			            		   Integer.parseInt(formattedIn[2]), Integer.parseInt(formattedIn[3]),
+			            		   Integer.parseInt(formattedIn[4]));
+			              	
+			            }
+			            else if(formattedIn[0].equals("Rec")) {
+			                
+			                Rectangle rectangle = new Rectangle(Integer.parseInt(formattedIn[1]), 
+				            		   Integer.parseInt(formattedIn[2]), Integer.parseInt(formattedIn[3]),
+				            		   Integer.parseInt(formattedIn[4]));
+			                //test.getPane().getChildren().add(rectangle);
+			            }
+			           else if(formattedIn[0].equals("Cir")) {
+			                
+			                //Circle circle = new Circle(scnr.nextInt, scnr.nextInt, scnr.nextInt, scnr.nextInt);
+			                //circleArray.add(circle);
+			                //
+			            }
+			            else if(formattedIn[0].equals("Med")) {
+			                
+			                //TODO: draw Media
+			            }
+			             
+			               			
+			               			
+			            
+
+			} 
+
+
+	    }
+	  }
+    }
+    
+    
 } // end class SimplePaint
