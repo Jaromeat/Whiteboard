@@ -295,7 +295,7 @@ public class FinalClientUsingJavaFX extends Application {
     public GraphicsContext getGraphics() {
     	return g;
     }
-    public Pane getPane()
+    public static Pane getPane()
     {
     	return root;
     }
@@ -304,10 +304,10 @@ public class FinalClientUsingJavaFX extends Application {
 
 	    public void run(){
 	    	 
-	    	 
+	    	inQueue = new ArrayList<String>();
 			while(serverCon = true)
 			{
-				if(!inQueue.isEmpty()) {
+				if(inQueue.size() != 0) {
 					
 					
 					String formattedIn[] = inQueue.remove(inQueue.size() - 1).split("\\s+"); 
@@ -323,7 +323,7 @@ public class FinalClientUsingJavaFX extends Application {
 			                Rectangle rectangle = new Rectangle(Integer.parseInt(formattedIn[1]), 
 				            		   Integer.parseInt(formattedIn[2]), Integer.parseInt(formattedIn[3]),
 				            		   Integer.parseInt(formattedIn[4]));
-			                //test.getPane().getChildren().add(rectangle);
+			                getPane().getChildren().add(rectangle);
 			            }
 			           else if(formattedIn[0].equals("Cir")) {
 			                

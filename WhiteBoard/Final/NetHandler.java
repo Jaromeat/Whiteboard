@@ -36,8 +36,7 @@ public class NetHandler {
 	
 	System.out.println("Connection Successful");
 	
-	inQueue = new ArrayList<String>();
-	outQueue = new ArrayList<String>();
+	
 	run = true;
 	
 	runClientThreads();
@@ -80,6 +79,7 @@ public class NetHandler {
 
 			public void run() 
 			{
+				outQueue = new ArrayList<String>();
 				try 
 				{
 					out = new DataOutputStream(ChatSocket.getOutputStream());
