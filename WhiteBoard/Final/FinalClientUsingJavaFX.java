@@ -76,6 +76,7 @@ public class FinalClientUsingJavaFX extends Application {
      */
     public void start(Stage stage) throws IOException {
         
+    	inQueue = new ArrayList<String>();
     	client = new NetHandler();
         /* Create the canvas and draw its content for the first time. */
         
@@ -106,10 +107,6 @@ public class FinalClientUsingJavaFX extends Application {
         });
        
         }
-        
-        
-    
-
 
     /**
      * Fills the canvas with white and draws the color palette and (simulated)
@@ -225,14 +222,16 @@ public class FinalClientUsingJavaFX extends Application {
         else if (x > 3 && x < width - 56 && y > 3 && y < height - 3) {
             // The user has clicked on the white drawing area.
             // Start drawing a curve from the point (x,y).
-        	if (rectMode) {
+        	
+        	//RECTANGLE
+        	if (rectMode) {				// rectMode allows user to place one rectangle before continuing to draw
         		Rectangle r = new Rectangle(x, y, 100, 100);
-        		root.getChildren().add(r);
-        		rectList.add(r);
-        		rectMode = false;
+        		root.getChildren().add(r);		//add to Pane
+        		rectList.add(r);				//add to Structure
+        		rectMode = false;				//allow user to draw again
         		
-        		client.send("REC " + x
-        		+ " " + y + " " + 100 + " " + 100);
+        		client.send("REC " + x + " " + y + " " + 100 + " " + 100);	//send rectangle command to server
+        		
             } else {
             	prevX = x;
             	prevY = y;
@@ -272,12 +271,8 @@ public class FinalClientUsingJavaFX extends Application {
             y = 3;                           //   to make sure it's in
         if (y > canvas.getHeight() - 4)       //   the drawing area.
             y = (int) (canvas.getHeight() - 4);
-
-        //client.send("DRW " + String.format("%010d", prevX) + " " //send int approximation, may be changed to double approximation
-          //    	 + String.format("%010d", prevY) + " " + String.format("%010d", x) 
-            //  	 + " " + String.format("%010d", y));
         
-       client.send("DRW " + prevX + " " + prevY + " " + x + " " + y);
+       client.send("DRW " + prevX + " " + prevY + " " + x + " " + y); // Send draw command to server
         
         draw( prevX, prevY, x, y);  // Draw the line.
        
@@ -302,17 +297,20 @@ public class FinalClientUsingJavaFX extends Application {
     {
     	return root;
     }
+    public ArrayList<String> getInQueue() {
+		return inQueue;
+	}
 
     public static class NetworkThread extends Thread {
 
 	    public void run(){
 	    	 
-	    	inQueue = new ArrayList<String>();
+	    	
 			while(serverCon = true)
 			{
-				if(inQueue.size() != 0) {
+				if(inQueue.size() != 0) { //only pull if queue has a message
 					
-					
+					//DECODE
 					String formattedIn[] = inQueue.remove(inQueue.size() - 1).split("\\s+"); 
 					if (formattedIn[0].equals("Drw")) {
 		                
@@ -320,37 +318,27 @@ public class FinalClientUsingJavaFX extends Application {
 			            		   Integer.parseInt(formattedIn[2]), Integer.parseInt(formattedIn[3]),
 			            		   Integer.parseInt(formattedIn[4]));
 			              	
-			            }
-					else if(formattedIn[0].equals("Tst")) {
-						System.out.println("TEST MESSAGE RECIEVED");
-					}
+			        }
 			        else if(formattedIn[0].equals("Rec")) {
 			                
-			                Rectangle rectangle = new Rectangle(Integer.parseInt(formattedIn[1]), 
-				            		   Integer.parseInt(formattedIn[2]), Integer.parseInt(formattedIn[3]),
-				            		   Integer.parseInt(formattedIn[4]));
-			                getPane().getChildren().add(rectangle);
-			            }
+			           Rectangle rectangle = new Rectangle(Integer.parseInt(formattedIn[1]), 
+			           Integer.parseInt(formattedIn[2]), Integer.parseInt(formattedIn[3]),
+			       	   Integer.parseInt(formattedIn[4]));
+			           getPane().getChildren().add(rectangle);
+			        }
 			        else if(formattedIn[0].equals("Cir")) {
 			                
-			                //Circle circle = new Circle(scnr.nextInt, scnr.nextInt, scnr.nextInt, scnr.nextInt);
-			                //circleArray.add(circle);
-			                //
-			            }
+			           //Circle circle = new Circle(scnr.nextInt, scnr.nextInt, scnr.nextInt, scnr.nextInt);
+			           //circleArray.add(circle);
+			           
+			        }
 			        else if(formattedIn[0].equals("Med")) {
 			                
-			                //TODO: draw Media
-			            }
-			             
-			               			
-			               			
-			            
-
-			} 
-
-
+			           //TODO: draw Media
+			        }
+				} 
+			}
 	    }
-	  }
     }
     
     

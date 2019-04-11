@@ -50,7 +50,7 @@ public class NetHandler {
 
 					public void run() 
 					{
-						
+						inQueue = test.getInQueue();
 						while(run)
 						{
 							try
@@ -80,7 +80,6 @@ public class NetHandler {
 			public void run() 
 			{
 				outQueue = new ArrayList<String>();
-				outQueue.add("Tst");
 				try 
 				{
 					out = new DataOutputStream(ChatSocket.getOutputStream());
@@ -90,9 +89,8 @@ public class NetHandler {
 					e1.printStackTrace();
 				}
 				while(run)
-				{		
-					System.out.print(nextOutput);
-					if(outQueue.size() != 0) {
+				{					
+					if(!outQueue.isEmpty()) {
 						
 						nextOutput = outQueue.remove(outQueue.size() - 1);
 						System.out.println(nextOutput);
@@ -112,6 +110,7 @@ public class NetHandler {
 					
 				}
 			}
+	
 		});
 		output.start();
 	}
@@ -131,6 +130,7 @@ public class NetHandler {
 		return ChatSocket;
 		
 	}
+	
 
 	public static void main(String[] args) throws IOException {
 		NetHandler client = new NetHandler();
