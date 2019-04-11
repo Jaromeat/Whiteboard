@@ -318,20 +318,23 @@ public class FinalClientUsingJavaFX extends Application {
 			            		   Integer.parseInt(formattedIn[4]));
 			              	
 			            }
-			            else if(formattedIn[0].equals("Rec")) {
+					else if(formattedIn[0].equals("Tst")) {
+						System.out.println("TEST MESSAGE RECIEVED");
+					}
+			        else if(formattedIn[0].equals("Rec")) {
 			                
 			                Rectangle rectangle = new Rectangle(Integer.parseInt(formattedIn[1]), 
 				            		   Integer.parseInt(formattedIn[2]), Integer.parseInt(formattedIn[3]),
 				            		   Integer.parseInt(formattedIn[4]));
 			                getPane().getChildren().add(rectangle);
 			            }
-			           else if(formattedIn[0].equals("Cir")) {
+			        else if(formattedIn[0].equals("Cir")) {
 			                
 			                //Circle circle = new Circle(scnr.nextInt, scnr.nextInt, scnr.nextInt, scnr.nextInt);
 			                //circleArray.add(circle);
 			                //
 			            }
-			            else if(formattedIn[0].equals("Med")) {
+			        else if(formattedIn[0].equals("Med")) {
 			                
 			                //TODO: draw Media
 			            }
