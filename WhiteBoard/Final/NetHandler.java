@@ -80,6 +80,7 @@ public class NetHandler {
 			public void run() 
 			{
 				outQueue = new ArrayList<String>();
+				outQueue.add("Tst");
 				try 
 				{
 					out = new DataOutputStream(ChatSocket.getOutputStream());
@@ -89,8 +90,9 @@ public class NetHandler {
 					e1.printStackTrace();
 				}
 				while(run)
-				{					
-					if(!outQueue.isEmpty()) {
+				{		
+					System.out.print(nextOutput);
+					if(outQueue.size() != 0) {
 						
 						nextOutput = outQueue.remove(outQueue.size() - 1);
 						System.out.println(nextOutput);
@@ -110,7 +112,6 @@ public class NetHandler {
 					
 				}
 			}
-	
 		});
 		output.start();
 	}
