@@ -23,11 +23,13 @@ public class Server {
 
 	        try {
 	        	
-	            ServerSocket ss = new ServerSocket(5000);
+	            ServerSocket ss = new ServerSocket(50001);
 
 	            userlist = new ArrayList<User>();
 	           
 	            User user;
+	            
+	            System.out.println("Server Start");
 	            
 	            while(running) {
 	            	user = new User(ss.accept());
@@ -35,7 +37,6 @@ public class Server {
 	            	userlist.add(user);
 	            	
 	            	user.start();
-	            	//user.run();
 	            	
 	            }
 	           

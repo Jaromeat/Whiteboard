@@ -37,6 +37,7 @@ public class User extends Thread {
             out.close(); 
             in.close();
             socket.close();
+            Server.userlist.remove(this);
     }
 
     public void sendMessage(String string) {
@@ -68,7 +69,7 @@ public class User extends Thread {
         try {
         	
         	
-        	
+        	System.out.println("User " + this.id + " has connected");
             while((input = in.readUTF()) != null) {
                 if(input.compareTo("{quit}") == 0) { //TODO: change to a close button
                 	closeStream();
@@ -82,7 +83,8 @@ public class User extends Thread {
             }
             closeStream();
         } catch(IOException e) { 
-        	e.printStackTrace();
+        	
+        	System.out.println("User " + this.id + " has disconnected");
         }
     }
 }

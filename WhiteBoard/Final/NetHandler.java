@@ -25,14 +25,14 @@ public class NetHandler {
 	String prevOutput = null;
 	String nextInput = null;
 	FinalClientUsingJavaFX test = new FinalClientUsingJavaFX();
-	ArrayList<String> inQueue;
+	
 	ArrayList<String> outQueue;
 	
 
 	public NetHandler() throws IOException 
 	{
 	
-	ChatSocket = new Socket("10.200.208.146", 50000);
+	ChatSocket = new Socket(host, 50001);
 	
 	System.out.println("Connection Successful");
 	
@@ -50,7 +50,6 @@ public class NetHandler {
 
 					public void run() 
 					{
-						inQueue = test.getInQueue();
 						try {
 							in = new DataInputStream(ChatSocket.getInputStream());
 						} catch (IOException e1) {
@@ -59,18 +58,20 @@ public class NetHandler {
 						}
 						while(run)
 						{
+						
+							
 							try
 							{
-								
+								Thread.sleep(10);
 								nextInput = in.readUTF();
 								if(nextInput != null) {
 									System.out.println(nextInput);   
-								    inQueue.add(nextInput);
+								    FinalClientUsingJavaFX.getInQueue().add(nextInput);
 								         
 								   } 
 							}
 							
-							catch(IOException e)
+							catch(IOException | InterruptedException e)
 							{
 								e.printStackTrace();
 							}

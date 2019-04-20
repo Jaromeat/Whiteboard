@@ -8,6 +8,7 @@ import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 import javafx.application.Application;
@@ -15,6 +16,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -28,10 +30,10 @@ public class FinalClientUsingJavaFX extends Application {
 
    
     public static void main(String[] args) {
-    	 NetworkThread netListener = new NetworkThread();
+    	  DecodeThread netListener = new DecodeThread();
   	     netListener.start();
-    	
-        launch(args);
+  	   launch(args);
+        
     }
 
    
@@ -58,15 +60,18 @@ public class FinalClientUsingJavaFX extends Application {
     
     private static ArrayList<Rectangle> rectList;
     
+    private static ArrayList<String> inQueue = new ArrayList<String>();
+    
     private NetHandler client;
     
     private String input;
     
-    public static ArrayList<String> inQueue;
+    
     
     private boolean rectMode = false;
+    private boolean ovalMode = false;
 
-    static boolean serverCon = false;
+    static boolean serverCon = true;
   
 
     /**
@@ -76,8 +81,9 @@ public class FinalClientUsingJavaFX extends Application {
      */
     public void start(Stage stage) throws IOException {
         
-    	inQueue = new ArrayList<String>();
+    	
     	client = new NetHandler();
+    	
         /* Create the canvas and draw its content for the first time. */
         
         canvas = new Canvas(600,400);
@@ -92,17 +98,25 @@ public class FinalClientUsingJavaFX extends Application {
         
         /* Configure the GUI and show the window. */
         Button rectBtn = new Button("Rectangle");
-        root = new Pane(canvas, rectBtn);
+        Button ovalBtn = new Button("Oval");
+        VBox vbox = new VBox(rectBtn, ovalBtn);
+        root = new Pane(canvas, vbox);
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setResizable(false);
         stage.setTitle("Simple Paint");
         stage.show();
-        
-        rectBtn.setOnAction(new EventHandler < ActionEvent > () {
+      
+        rectBtn.setOnAction(new EventHandler < ActionEvent > () {  //rectangle button event handler
         	@Override
         	public void handle(ActionEvent e) {
         		rectMode = true;
+        	}
+        });
+        ovalBtn.setOnAction(new EventHandler < ActionEvent > () {   //oval button event handler
+        	@Override
+        	public void handle(ActionEvent e) {
+        		ovalMode = true;
         	}
         });
        
@@ -163,7 +177,8 @@ public class FinalClientUsingJavaFX extends Application {
         g.setStroke(Color.WHITE);
         g.setLineWidth(2);
         g.strokeRect(width-54, 2 + currentColorNum*colorSpacing, 52, colorSpacing-1);
-
+        g.setStroke(Color.BLACK);
+        g.setFill(Color.BLACK);
     } // end clearAndDrawPalette()
 
 
@@ -223,22 +238,16 @@ public class FinalClientUsingJavaFX extends Application {
             // The user has clicked on the white drawing area.
             // Start drawing a curve from the point (x,y).
         	
-        	//RECTANGLE
-        	if (rectMode) {				// rectMode allows user to place one rectangle before continuing to draw
-        		Rectangle r = new Rectangle(x, y, 100, 100);
-        		root.getChildren().add(r);		//add to Pane
-        		rectList.add(r);				//add to Structure
-        		rectMode = false;				//allow user to draw again
-        		
-        		client.send("REC " + x + " " + y + " " + 100 + " " + 100);	//send rectangle command to server
-        		
-            } else {
-            	prevX = x;
-            	prevY = y;
-            	dragging = true;
-            	g.setLineWidth(2);  // Use a 2-pixel-wide line for drawing.
-            	g.setStroke( palette[currentColorNum] );
-            }
+        	
+           	prevX = x;
+           	prevY = y;
+           	
+           		
+           	dragging = true;
+           	g.setLineWidth(2);  // Use a 2-pixel-wide line for drawing.
+           	g.setStroke( palette[currentColorNum] );
+           	g.setFill( palette[currentColorNum]);
+            
         }
 
     } // end mousePressed()
@@ -249,7 +258,39 @@ public class FinalClientUsingJavaFX extends Application {
      * dragging to false.
      */
     public void mouseReleased(MouseEvent evt) {
-        dragging = false;
+        if(rectMode || ovalMode) {
+        			// rectMode allows user to place one rectangle before continuing to draw
+        	x = (int) evt.getX();
+        	y = (int) evt.getY();
+        	
+        	if (x < 3)                          // Adjust the value of x,
+                x = 3;                           //   to make sure it's in
+            if (x > canvas.getWidth() - 57)       //   the drawing area.
+                x = (int)canvas.getWidth() - 57;
+
+            if (y < 3)                          // Adjust the value of y,
+                y = 3;                           //   to make sure it's in
+            if (y > canvas.getHeight() - 4)       //   the drawing area.
+                y = (int) (canvas.getHeight() - 4);
+            
+            int w = x - prevX;
+            int h = y - prevY;
+        	
+            if(rectMode) {
+            	g.fillRect(prevX, prevY, w, h);
+            	rectMode = false;				//allow user to draw again
+        		
+            	client.send("REC " + prevX + " " + prevY + " " + w + " " + h);	//send rectangle command to server
+            }
+            if(ovalMode) {
+            	g.fillOval(prevX, prevY, w, h);
+            	ovalMode = false;				//allow user to draw again
+        		
+            	client.send("CIR " + prevX + " " + prevY + " " + w + " " + h);	//send oval command to server
+            }
+        }
+    	dragging = false;
+        
     }
 
 
@@ -272,71 +313,95 @@ public class FinalClientUsingJavaFX extends Application {
         if (y > canvas.getHeight() - 4)       //   the drawing area.
             y = (int) (canvas.getHeight() - 4);
         
-       client.send("DRW " + prevX + " " + prevY + " " + x + " " + y); // Send draw command to server
+        if(!rectMode && !ovalMode) {
+        	client.send("DRW " + prevX + " " + prevY + " " + x + " " + y); // Send draw command to server
         
-        draw( prevX, prevY, x, y);  // Draw the line.
-       
-        prevX = x;  // Get ready for the next line segment in the curve.
-        prevY = y;
+        	draw( prevX, prevY, x, y);  // Draw the line.
+        	
+        	prevX = x;  // Get ready for the next line segment in the curve.
+            prevY = y;
+        }
+        
 
     } // end mouseDragged()
 
-    public void draw(int prevX2, int prevY2, int x2, int y2)
+    public static void draw(int prevX2, int prevY2, int x2, int y2)
     {
     	 g.strokeLine(prevX2, prevY2, x2, y2);  // Draw the line.
     	
     }
     
-    public void drawIn(int prevX2, int prevY2, int x2, int y2) {
-    	g.strokeLine(prevX2, prevY2, x2, y2);
-    }
-    public GraphicsContext getGraphics() {
+    public static GraphicsContext getGraphics() {
     	return g;
     }
     public static Pane getPane()
     {
     	return root;
     }
-    public ArrayList<String> getInQueue() {
+    public static ArrayList<String> getInQueue() {
 		return inQueue;
 	}
 
-    public static class NetworkThread extends Thread {
+    public static class DecodeThread extends Thread {
 
 	    public void run(){
 	    	 
-	    	
+	    	 FinalClientUsingJavaFX test = new FinalClientUsingJavaFX();
+	    	 
 			while(serverCon = true)
 			{
+				
+				//System.out.println("hi");
 				if(inQueue.size() != 0) { //only pull if queue has a message
 					
 					//DECODE
-					String formattedIn[] = inQueue.remove(inQueue.size() - 1).split("\\s+"); 
-					if (formattedIn[0].equals("Drw")) {
-		                
-						 g.strokeLine( Integer.parseInt(formattedIn[1]), 
-			            		   Integer.parseInt(formattedIn[2]), Integer.parseInt(formattedIn[3]),
-			            		   Integer.parseInt(formattedIn[4]));
+					String formattedIn[] = inQueue.remove(0).split("\\s+"); 
+					
+					if (formattedIn[0].equals("DRW")) {
+						System.out.println("FORMATTED: " + Arrays.toString(formattedIn));
+						Double x  = Double.parseDouble(formattedIn[1]);
+						Double y  = Double.parseDouble(formattedIn[2]);
+						Double px = Double.parseDouble(formattedIn[3]);
+						Double py = Double.parseDouble(formattedIn[4]);
+						getGraphics().strokeLine(px, py, x, y);
 			              	
 			        }
-			        else if(formattedIn[0].equals("Rec")) {
-			                
-			           Rectangle rectangle = new Rectangle(Integer.parseInt(formattedIn[1]), 
-			           Integer.parseInt(formattedIn[2]), Integer.parseInt(formattedIn[3]),
-			       	   Integer.parseInt(formattedIn[4]));
-			           getPane().getChildren().add(rectangle);
-			        }
-			        else if(formattedIn[0].equals("Cir")) {
-			                
-			           //Circle circle = new Circle(scnr.nextInt, scnr.nextInt, scnr.nextInt, scnr.nextInt);
-			           //circleArray.add(circle);
+					else if(formattedIn[0].equals("REC")) {
+						System.out.println("FORMATTED: " + Arrays.toString(formattedIn));
+						Double x = Double.parseDouble(formattedIn[1]);
+						Double y = Double.parseDouble(formattedIn[2]);
+						Double w = Double.parseDouble(formattedIn[3]);
+						Double h = Double.parseDouble(formattedIn[4]);
+						getGraphics().fillRect(x, y, w, h);
 			           
 			        }
-			        else if(formattedIn[0].equals("Med")) {
+			        else if(formattedIn[0].equals("CIR")) {
+			        	System.out.println("FORMATTED: " + Arrays.toString(formattedIn));
+						Double x = Double.parseDouble(formattedIn[1]);
+						Double y = Double.parseDouble(formattedIn[2]);
+						Double w = Double.parseDouble(formattedIn[3]);
+						Double h = Double.parseDouble(formattedIn[4]);
+						getGraphics().fillOval(x, y, w, h);
+			           
+			        }
+			        else if(formattedIn[0].equals("MED")) {
 			                
 			           //TODO: draw Media
-			        }
-				} 
+			        }	
+					
+				}
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+					
+					e.printStackTrace();
+				}
+			}
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				
+				e.printStackTrace();
 			}
 	    }
     }
