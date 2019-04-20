@@ -1,4 +1,7 @@
 # Whiteboard
+## Current Working Demo
+
+https://youtu.be/nSvs9eiHcYs
 
 ## Description
 
@@ -46,6 +49,10 @@ being drawn by each user. The app hopes to  give users a collaborative way to dr
 1. Testing Client to Server
 2. Documentation
 3. Project finalization
+
+## Credit
+Much of the actual original JavaFX implementation for drawing the canvas was taken from this reference which created a simple JavaFX paint program:
+http://math.hws.edu/javanotes8/source/chapter6/SimplePaint.java
 
 ## Team memberz
 
