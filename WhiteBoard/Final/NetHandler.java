@@ -4,12 +4,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Queue;
 import java.util.Scanner;
-
-import com.sun.javafx.geom.Rectangle;
 
 public class NetHandler {
 	
@@ -24,7 +20,6 @@ public class NetHandler {
 	String nextOutput = null;
 	String prevOutput = null;
 	String nextInput = null;
-	FinalClientUsingJavaFX test = new FinalClientUsingJavaFX();
 	
 	ArrayList<String> outQueue;
 	
@@ -32,20 +27,22 @@ public class NetHandler {
 	public NetHandler() throws IOException 
 	{
 	
-	ChatSocket = new Socket(host, 50001);
+	ChatSocket = new Socket(host, 50001);		//connect to server
 	
 	System.out.println("Connection Successful");
 	
 	
 	run = true;
 	
-	runClientThreads();
+	runClientThreads();			//start threads
 		
 	}
 	
-
+	/**
+	 * runs input and output thread
+	 */
 	public void runClientThreads() {
-		Thread input = new Thread(new Runnable() 
+		Thread input = new Thread(new Runnable() //INPUT THREAD
 				{
 
 					public void run() 
@@ -63,10 +60,10 @@ public class NetHandler {
 							try
 							{
 								Thread.sleep(10);
-								nextInput = in.readUTF();
-								if(nextInput != null) {
+								nextInput = in.readUTF();		//check for input every 10 milliseconds
+								if(nextInput != null) {			
 									System.out.println(nextInput);   
-								    FinalClientUsingJavaFX.getInQueue().add(nextInput);
+								    FinalClientUsingJavaFX.getInQueue().add(nextInput);	//add any input to the input queue and print it
 								         
 								   } 
 							}
@@ -81,7 +78,7 @@ public class NetHandler {
 			
 				});
 		input.start();
-		Thread output = new Thread(new Runnable() 
+		Thread output = new Thread(new Runnable() // OUTPUT THREAD
 		{
 
 			public void run() 
@@ -100,14 +97,14 @@ public class NetHandler {
 					try {
 						Thread.sleep(10);
 						//System.out.println(nextOutput);
-						if(outQueue.size() != 0) {
+						if(outQueue.size() != 0) {					//if the output queue isnt empty remove an entry
 							nextOutput = outQueue.remove(0);
 							if (nextOutput == null) {
 								continue;
 							}
 							System.out.println(nextOutput);
-								out.writeUTF(nextOutput);
-								out.flush();
+								out.writeUTF(nextOutput);			//print the output and send it to the server
+								out.flush();						//clear the stream
 								//System.out.println(nextOutput);
 						}	
 					}
@@ -120,24 +117,36 @@ public class NetHandler {
 					}
 					
 						
-						nextOutput = null;
+						nextOutput = null;			//clear nextOutput
 					}
 					
 				}
 	
 		});output.start();
 	}
-
+	/**
+	 * closes all datastreams and sockets in use
+	 * @throws IOException
+	 */
 	public void closeConnection() throws IOException
 	{
 		out.close();
 		in.close();
 		ChatSocket.close();
 	}
-	
+
+	/**
+	 * add output to the output queue
+	 * @param output
+	 */
 	public void send(String output) {
 		outQueue.add(output);
 	}
+	
+	/**
+	 * getter method for socket
+	 * @return
+	 */
 	public Socket getSocket()
 	{
 		return ChatSocket;

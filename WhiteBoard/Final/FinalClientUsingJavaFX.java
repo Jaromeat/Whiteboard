@@ -1,15 +1,9 @@
 package Final;
 
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Scanner;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -23,16 +17,15 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 
 
 public class FinalClientUsingJavaFX extends Application {
 
    
     public static void main(String[] args) {
-    	  DecodeThread netListener = new DecodeThread();
-  	     netListener.start();
-  	   launch(args);
+    	  DecodeThread netListener = new DecodeThread(); 
+  	     netListener.start();		//starts decodeThread
+  	   launch(args);		//launches javaFX window
         
     }
 
@@ -56,22 +49,17 @@ public class FinalClientUsingJavaFX extends Application {
 
     private static GraphicsContext g;  // For drawing on the canvas.
     
-    private static Pane root;
+    private static Pane root;	// holds all javaFX objects
     
-    private static ArrayList<Rectangle> rectList;
+    private static ArrayList<String> inQueue = new ArrayList<String>();	//queue for incoming data
     
-    private static ArrayList<String> inQueue = new ArrayList<String>();
+    private NetHandler client;	//handles input and output to server
     
-    private NetHandler client;
+    private boolean rectMode = false;	//allows user to draw a rectangle
     
-    private String input;
-    
-    
-    
-    private boolean rectMode = false;
-    private boolean ovalMode = false;
+    private boolean ovalMode = false;	//allows user to draw an oval
 
-    static boolean serverCon = true;
+    static boolean serverCon = true;	//true if connected to server
   
 
     /**
@@ -185,6 +173,7 @@ public class FinalClientUsingJavaFX extends Application {
     /**
      * Change the drawing color after the user has clicked the
      * mouse on the color palette at a point with y-coordinate y.
+     * @param y coordinate
      */
     private void changeColor(int y) {
 
@@ -211,7 +200,10 @@ public class FinalClientUsingJavaFX extends Application {
 
 
 
-  
+  /**
+   * when the mouse is pressed, save the coordinates and determine if color or clear button are clicked
+   * @param mouse pressed
+   */
     public void mousePressed(MouseEvent evt) {
 
         if (dragging == true)  // Ignore mouse presses that occur
@@ -294,7 +286,10 @@ public class FinalClientUsingJavaFX extends Application {
     }
 
 
-   
+   /**
+    * When the mouse is dragged, if not drawing a shape, draw a line
+    * @param dragged
+    */
     public void mouseDragged( MouseEvent evt) {
 
         if (dragging == false)
@@ -325,28 +320,42 @@ public class FinalClientUsingJavaFX extends Application {
 
     } // end mouseDragged()
 
+    /**
+     * draws a line to the canvas
+     * @param prevX2
+     * @param prevY2
+     * @param x2
+     * @param y2
+     */
     public static void draw(int prevX2, int prevY2, int x2, int y2)
     {
     	 g.strokeLine(prevX2, prevY2, x2, y2);  // Draw the line.
     	
     }
-    
+    /**
+     * getter method for Canvas
+     * @return GraphicsContext
+     */
     public static GraphicsContext getGraphics() {
     	return g;
     }
-    public static Pane getPane()
-    {
-    	return root;
-    }
+    /**
+     * getter method for the input queue
+     * @return
+     */
     public static ArrayList<String> getInQueue() {
 		return inQueue;
 	}
-
+    
+    /**
+     * thread for decoding and handling data from input queue
+     *
+     */
     public static class DecodeThread extends Thread {
 
 	    public void run(){
 	    	 
-	    	 FinalClientUsingJavaFX test = new FinalClientUsingJavaFX();
+	    	 
 	    	 
 			while(serverCon = true)
 			{
@@ -355,50 +364,46 @@ public class FinalClientUsingJavaFX extends Application {
 				if(inQueue.size() != 0) { //only pull if queue has a message
 					
 					//DECODE
-					String formattedIn[] = inQueue.remove(0).split("\\s+"); 
+					String formattedIn[] = inQueue.remove(0).split("\\s+"); //formats the incoming data
 					
-					if (formattedIn[0].equals("DRW")) {
+					if (formattedIn[0].equals("DRW")) {		//checks for draw tag
 						System.out.println("FORMATTED: " + Arrays.toString(formattedIn));
 						Double x  = Double.parseDouble(formattedIn[1]);
 						Double y  = Double.parseDouble(formattedIn[2]);
 						Double px = Double.parseDouble(formattedIn[3]);
 						Double py = Double.parseDouble(formattedIn[4]);
-						getGraphics().strokeLine(px, py, x, y);
+						getGraphics().strokeLine(px, py, x, y);			//draws the line to the canvas
 			              	
 			        }
-					else if(formattedIn[0].equals("REC")) {
+					else if(formattedIn[0].equals("REC")) {		//checks for rectangle tag
 						System.out.println("FORMATTED: " + Arrays.toString(formattedIn));
 						Double x = Double.parseDouble(formattedIn[1]);
 						Double y = Double.parseDouble(formattedIn[2]);
 						Double w = Double.parseDouble(formattedIn[3]);
 						Double h = Double.parseDouble(formattedIn[4]);
-						getGraphics().fillRect(x, y, w, h);
+						getGraphics().fillRect(x, y, w, h);				//draws the rectangle to the canvas
 			           
 			        }
-			        else if(formattedIn[0].equals("CIR")) {
+			        else if(formattedIn[0].equals("CIR")) {		//checks for oval tag
 			        	System.out.println("FORMATTED: " + Arrays.toString(formattedIn));
 						Double x = Double.parseDouble(formattedIn[1]);
 						Double y = Double.parseDouble(formattedIn[2]);
 						Double w = Double.parseDouble(formattedIn[3]);
 						Double h = Double.parseDouble(formattedIn[4]);
-						getGraphics().fillOval(x, y, w, h);
+						getGraphics().fillOval(x, y, w, h);				//draws the oval to the canvas
 			           
 			        }
-			        else if(formattedIn[0].equals("MED")) {
-			                
-			           //TODO: draw Media
-			        }	
 					
 				}
 				try {
-					Thread.sleep(10);
+					Thread.sleep(10);			//delays decode to protect javafx
 				} catch (InterruptedException e) {
 					
 					e.printStackTrace();
 				}
 			}
 			try {
-				Thread.sleep(10);
+				Thread.sleep(10);				//further delays for javafx
 			} catch (InterruptedException e) {
 				
 				e.printStackTrace();

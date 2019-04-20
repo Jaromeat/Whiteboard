@@ -13,7 +13,9 @@ public class Server {
 
 	    public static ArrayList<User> userlist;
 	    
-
+	    /**
+	     * stops server
+	     */
 	    public static synchronized void stop() { 
 	        if(!running) return;
 	        running = false;
@@ -31,7 +33,7 @@ public class Server {
 	            
 	            System.out.println("Server Start");
 	            
-	            while(running) {
+	            while(running) {			//assigns any new connection a user class and runs the user's start method
 	            	user = new User(ss.accept());
 
 	            	userlist.add(user);
